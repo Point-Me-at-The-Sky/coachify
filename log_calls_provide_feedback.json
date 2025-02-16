@@ -1,0 +1,2693 @@
+{
+    "name": "Integration Vapi, Data store",
+    "flow": [
+        {
+            "id": 1,
+            "module": "vapi:endOfCallReport",
+            "version": 1,
+            "parameters": {
+                "__IMTHOOK__": 1669751
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 168,
+                    "y": -42
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTHOOK__": {
+                            "data": {
+                                "editable": "false"
+                            },
+                            "label": "My Vapi Webhook"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTHOOK__",
+                        "type": "hook:vapi",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 12,
+            "module": "util:SetVariable2",
+            "version": 1,
+            "parameters": {},
+            "filter": {
+                "name": "",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{1.type}}",
+                            "b": "end-of-call-report",
+                            "o": "text:equal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "name": "sample interview transcript",
+                "scope": "roundtrip",
+                "value": "AI: Good morning. I have 20 minutes available to discuss potential solutions. What specific data platform challenges are you proposing to address with your SAS offering?\nUser: How do you like that the Wix have a tool?\nAI: I do not have any experience with Wix. It is not relevant to our data platform strategy. We require solutions\nUser: Now setting data rates.\nAI: data rates for what specific service or product.\n\n​"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 425,
+                    "y": -70
+                },
+                "restore": {
+                    "expect": {
+                        "scope": {
+                            "label": "One cycle"
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Variable name",
+                        "required": true
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "value",
+                        "type": "any",
+                        "label": "Variable value"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "sample interview transcript",
+                        "type": "any",
+                        "label": "sample interview transcript"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 7,
+            "module": "google-sheets:addRow",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 5666789
+            },
+            "mapper": {
+                "from": "share",
+                "mode": "select",
+                "values": {
+                    "0": "{{1.type}}",
+                    "1": "{{1.endedReason}}",
+                    "2": "{{1.recordingUrl}}",
+                    "3": "{{1.cost}}",
+                    "4": "{{1.durationSeconds}}",
+                    "5": "{{1.artifact.transcript}}",
+                    "6": "{{1.artifact.recordingUrl}}",
+                    "7": "{{1.startedAt}}",
+                    "8": "{{1.endedAt}}",
+                    "9": "{{substring(1.startedAt; 0; 10)}}",
+                    "11": "{{1.assistant.voice.provider}}",
+                    "12": "{{1.assistant.voice.model}}",
+                    "13": "{{1.assistant.model.provider}}",
+                    "14": "{{1.assistant.model.model}}",
+                    "15": "{{1.assistant.firstMessage}}",
+                    "16": "{{1.assistant.model.messages[].content}}",
+                    "17": "{{1.assistant.transcriber.model}}{{1.assistant.transcriber.language}}{{1.assistant.transcriber.provider}}",
+                    "28": "Standard",
+                    "29": "{{1.analysis.summary}}",
+                    "30": "{{1.analysis.successEvaluation}}",
+                    "31": "{{1.timestamp}}",
+                    "32": "{{1.assistant.id}}",
+                    "33": "{{1.assistant.name}}"
+                },
+                "sheetId": "log_responses_sales",
+                "spreadsheetId": "/1K2iyKc8KhvhGRY_VGy8RmHhOObFqaLbbYiLIYkaQW5A",
+                "includesHeaders": true,
+                "insertDataOption": "INSERT_ROWS",
+                "valueInputOption": "USER_ENTERED",
+                "insertUnformatted": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 677,
+                    "y": -99
+                },
+                "restore": {
+                    "expect": {
+                        "from": {
+                            "label": "Shared with me"
+                        },
+                        "mode": {
+                            "label": "Search by path"
+                        },
+                        "sheetId": {
+                            "label": "log_responses_sales"
+                        },
+                        "spreadsheetId": {
+                            "path": [
+                                "Deepseek Hackathon"
+                            ]
+                        },
+                        "includesHeaders": {
+                            "label": "Yes",
+                            "nested": [
+                                {
+                                    "name": "values",
+                                    "spec": [
+                                        {
+                                            "name": "0",
+                                            "type": "text",
+                                            "label": "Type (A)"
+                                        },
+                                        {
+                                            "name": "1",
+                                            "type": "text",
+                                            "label": "Call End Reason (B)"
+                                        },
+                                        {
+                                            "name": "2",
+                                            "type": "text",
+                                            "label": "Vapi link (C)"
+                                        },
+                                        {
+                                            "name": "3",
+                                            "type": "text",
+                                            "label": "Collection 1 (D)"
+                                        },
+                                        {
+                                            "name": "4",
+                                            "type": "text",
+                                            "label": "Collection 2 (E)"
+                                        },
+                                        {
+                                            "name": "5",
+                                            "type": "text",
+                                            "label": "Transcript (F)"
+                                        },
+                                        {
+                                            "name": "6",
+                                            "type": "text",
+                                            "label": "Vap storage link 2 (G)"
+                                        },
+                                        {
+                                            "name": "7",
+                                            "type": "text",
+                                            "label": "Timestamp (H)"
+                                        },
+                                        {
+                                            "name": "8",
+                                            "type": "text",
+                                            "label": "Timestamp 2 (I)"
+                                        },
+                                        {
+                                            "name": "9",
+                                            "type": "text",
+                                            "label": "Timestamp (Cleaned) (J)"
+                                        },
+                                        {
+                                            "name": "10",
+                                            "type": "text",
+                                            "label": "unused (K)"
+                                        },
+                                        {
+                                            "name": "11",
+                                            "type": "text",
+                                            "label": "model provider (L)"
+                                        },
+                                        {
+                                            "name": "12",
+                                            "type": "text",
+                                            "label": "Voice model (M)"
+                                        },
+                                        {
+                                            "name": "13",
+                                            "type": "text",
+                                            "label": "Voice model 2 (N)"
+                                        },
+                                        {
+                                            "name": "14",
+                                            "type": "text",
+                                            "label": "LLM provider (O)"
+                                        },
+                                        {
+                                            "name": "15",
+                                            "type": "text",
+                                            "label": "LLM model (P)"
+                                        },
+                                        {
+                                            "name": "16",
+                                            "type": "text",
+                                            "label": "Conversation starter (Q)"
+                                        },
+                                        {
+                                            "name": "17",
+                                            "type": "text",
+                                            "label": "System Prompt (R)"
+                                        },
+                                        {
+                                            "name": "18",
+                                            "type": "text",
+                                            "label": "LLM provider 2 (S)"
+                                        },
+                                        {
+                                            "name": "19",
+                                            "type": "text",
+                                            "label": "Overall analysis (T)"
+                                        },
+                                        {
+                                            "name": "20",
+                                            "type": "text",
+                                            "label": "Criteria 1) Communication Skills (U)"
+                                        },
+                                        {
+                                            "name": "21",
+                                            "type": "text",
+                                            "label": "Criteria 2) Needs Assessment (V)"
+                                        },
+                                        {
+                                            "name": "22",
+                                            "type": "text",
+                                            "label": "Criteria 3) Product Knowledge (W)"
+                                        },
+                                        {
+                                            "name": "23",
+                                            "type": "text",
+                                            "label": "Criteria 4) Objection Handling (X)"
+                                        },
+                                        {
+                                            "name": "24",
+                                            "type": "text",
+                                            "label": "Criteria 5) Call Structure (Y)"
+                                        },
+                                        {
+                                            "name": "25",
+                                            "type": "text",
+                                            "label": "🔐 Softr Record ID (Z)"
+                                        },
+                                        {
+                                            "name": "26",
+                                            "type": "text",
+                                            "label": "Custom Scenario Name (AA)"
+                                        },
+                                        {
+                                            "name": "27",
+                                            "type": "text",
+                                            "label": "Custom User Prompt (AB)"
+                                        },
+                                        {
+                                            "name": "28",
+                                            "type": "text",
+                                            "label": "Custom User Prompt Flag (AC)"
+                                        },
+                                        {
+                                            "name": "29",
+                                            "type": "text",
+                                            "label": "VAPI call summary (AD)"
+                                        },
+                                        {
+                                            "name": "30",
+                                            "type": "text",
+                                            "label": "VAPI call outcome (AE)"
+                                        },
+                                        {
+                                            "name": "31",
+                                            "type": "text",
+                                            "label": "timestamp numeric (AF)"
+                                        },
+                                        {
+                                            "name": "32",
+                                            "type": "text",
+                                            "label": "Assistant ID (AG)"
+                                        },
+                                        {
+                                            "name": "33",
+                                            "type": "text",
+                                            "label": "assistant name (AH)"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Values"
+                                }
+                            ]
+                        },
+                        "insertDataOption": {
+                            "mode": "chose",
+                            "label": "Insert rows"
+                        },
+                        "valueInputOption": {
+                            "mode": "chose",
+                            "label": "User entered"
+                        },
+                        "insertUnformatted": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "My Google connection (lorenzo.governatori@gmail.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "mode",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "select",
+                                "fromAll",
+                                "map"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "insertUnformatted",
+                        "type": "boolean",
+                        "label": "Unformatted",
+                        "required": true
+                    },
+                    {
+                        "name": "valueInputOption",
+                        "type": "select",
+                        "label": "Value input option",
+                        "validate": {
+                            "enum": [
+                                "USER_ENTERED",
+                                "RAW"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "insertDataOption",
+                        "type": "select",
+                        "label": "Insert data option",
+                        "validate": {
+                            "enum": [
+                                "INSERT_ROWS",
+                                "OVERWRITE"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Drive",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share",
+                                "team"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "file",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "values",
+                        "spec": [
+                            {
+                                "name": "0",
+                                "type": "text",
+                                "label": "Type (A)"
+                            },
+                            {
+                                "name": "1",
+                                "type": "text",
+                                "label": "Call End Reason (B)"
+                            },
+                            {
+                                "name": "2",
+                                "type": "text",
+                                "label": "Vapi link (C)"
+                            },
+                            {
+                                "name": "3",
+                                "type": "text",
+                                "label": "Collection 1 (D)"
+                            },
+                            {
+                                "name": "4",
+                                "type": "text",
+                                "label": "Collection 2 (E)"
+                            },
+                            {
+                                "name": "5",
+                                "type": "text",
+                                "label": "Transcript (F)"
+                            },
+                            {
+                                "name": "6",
+                                "type": "text",
+                                "label": "Vap storage link 2 (G)"
+                            },
+                            {
+                                "name": "7",
+                                "type": "text",
+                                "label": "Timestamp (H)"
+                            },
+                            {
+                                "name": "8",
+                                "type": "text",
+                                "label": "Timestamp 2 (I)"
+                            },
+                            {
+                                "name": "9",
+                                "type": "text",
+                                "label": "Timestamp (Cleaned) (J)"
+                            },
+                            {
+                                "name": "10",
+                                "type": "text",
+                                "label": "unused (K)"
+                            },
+                            {
+                                "name": "11",
+                                "type": "text",
+                                "label": "model provider (L)"
+                            },
+                            {
+                                "name": "12",
+                                "type": "text",
+                                "label": "Voice model (M)"
+                            },
+                            {
+                                "name": "13",
+                                "type": "text",
+                                "label": "Voice model 2 (N)"
+                            },
+                            {
+                                "name": "14",
+                                "type": "text",
+                                "label": "LLM provider (O)"
+                            },
+                            {
+                                "name": "15",
+                                "type": "text",
+                                "label": "LLM model (P)"
+                            },
+                            {
+                                "name": "16",
+                                "type": "text",
+                                "label": "Conversation starter (Q)"
+                            },
+                            {
+                                "name": "17",
+                                "type": "text",
+                                "label": "System Prompt (R)"
+                            },
+                            {
+                                "name": "18",
+                                "type": "text",
+                                "label": "LLM provider 2 (S)"
+                            },
+                            {
+                                "name": "19",
+                                "type": "text",
+                                "label": "Overall analysis (T)"
+                            },
+                            {
+                                "name": "20",
+                                "type": "text",
+                                "label": "Criteria 1) Communication Skills (U)"
+                            },
+                            {
+                                "name": "21",
+                                "type": "text",
+                                "label": "Criteria 2) Needs Assessment (V)"
+                            },
+                            {
+                                "name": "22",
+                                "type": "text",
+                                "label": "Criteria 3) Product Knowledge (W)"
+                            },
+                            {
+                                "name": "23",
+                                "type": "text",
+                                "label": "Criteria 4) Objection Handling (X)"
+                            },
+                            {
+                                "name": "24",
+                                "type": "text",
+                                "label": "Criteria 5) Call Structure (Y)"
+                            },
+                            {
+                                "name": "25",
+                                "type": "text",
+                                "label": "🔐 Softr Record ID (Z)"
+                            },
+                            {
+                                "name": "26",
+                                "type": "text",
+                                "label": "Custom Scenario Name (AA)"
+                            },
+                            {
+                                "name": "27",
+                                "type": "text",
+                                "label": "Custom User Prompt (AB)"
+                            },
+                            {
+                                "name": "28",
+                                "type": "text",
+                                "label": "Custom User Prompt Flag (AC)"
+                            },
+                            {
+                                "name": "29",
+                                "type": "text",
+                                "label": "VAPI call summary (AD)"
+                            },
+                            {
+                                "name": "30",
+                                "type": "text",
+                                "label": "VAPI call outcome (AE)"
+                            },
+                            {
+                                "name": "31",
+                                "type": "text",
+                                "label": "timestamp numeric (AF)"
+                            },
+                            {
+                                "name": "32",
+                                "type": "text",
+                                "label": "Assistant ID (AG)"
+                            },
+                            {
+                                "name": "33",
+                                "type": "text",
+                                "label": "assistant name (AH)"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Values"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 19,
+            "module": "regexp:Replace",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "text": "{{1.transcript}}",
+                "value": " ",
+                "global": true,
+                "pattern": "\\r\\n|\\r|\\n",
+                "multiline": true,
+                "sensitive": false,
+                "singleline": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 915,
+                    "y": -173
+                },
+                "restore": {
+                    "expect": {
+                        "global": {
+                            "mode": "chose"
+                        },
+                        "multiline": {
+                            "mode": "chose"
+                        },
+                        "sensitive": {
+                            "mode": "chose"
+                        },
+                        "singleline": {
+                            "mode": "chose"
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "pattern",
+                        "type": "text",
+                        "label": "Pattern",
+                        "required": true
+                    },
+                    {
+                        "name": "value",
+                        "type": "text",
+                        "label": "New value"
+                    },
+                    {
+                        "name": "global",
+                        "type": "boolean",
+                        "label": "Global match",
+                        "required": true
+                    },
+                    {
+                        "name": "sensitive",
+                        "type": "boolean",
+                        "label": "Case sensitive",
+                        "required": true
+                    },
+                    {
+                        "name": "multiline",
+                        "type": "boolean",
+                        "label": "Multiline",
+                        "required": true
+                    },
+                    {
+                        "name": "singleline",
+                        "type": "boolean",
+                        "label": "Singleline",
+                        "required": true
+                    },
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 22,
+            "module": "http:ActionSendDataAPIKeyAuth",
+            "version": 3,
+            "parameters": {
+                "auth": 61592,
+                "handleErrors": false
+            },
+            "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "https://api.aimlapi.com/chat/completions",
+                "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"## System Prompt for AI Sales Coach  You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives.  Your evaluation should be based on the following five key criteria, but please just mention 2 or 3 key improvement areas:  1. **Communication Skills:** Assesses the salesperson's ability to articulate clearly, listen actively, and maintain a positive tone.     * 1: Poor communication, frequent interruptions, unclear articulation, negative tone.     * 2: Below average communication, some unclear explanations, occasional interruptions, tone could be improved.     * 3: Average communication, generally clear but could be more engaging, listens adequately, neutral tone.     * 4: Good communication, clear and engaging, active listening demonstrated, positive and professional tone.     * 5: Excellent communication, articulate and persuasive, demonstrates exceptional active listening, maintains a consistently positive and professional tone.  2. **Needs Assessment and Discovery:** Evaluates how well the salesperson uncovers the prospect's pain points and business needs.     * 1: Fails to ask relevant questions, demonstrates no understanding of prospect's needs.     * 2: Asks basic questions without follow-up, superficial understanding of prospect's needs.     * 3: Adequate questioning, gains some insights into prospect's needs, but could probe deeper.     * 4: Good discovery, uncovers key pain points and business needs, demonstrates a good understanding of the prospect's situation.     * 5: Excellent discovery, thoroughly understands the prospect's needs, uncovers underlying pain points and potential opportunities.  3. **Product Knowledge and Value Proposition:** Assesses the salesperson's understanding of the product and ability to align its benefits with the prospect's needs.     * 1: Lacks product knowledge, unable to articulate the value proposition.     * 2: Basic product knowledge, struggles to connect product features to prospect needs.     * 3: Adequate product knowledge, presents some value alignment, but could be more persuasive.     * 4: Good product knowledge, clearly articulates the value proposition and connects it to prospect needs.     * 5: Excellent product expertise, demonstrates deep understanding and passion for the product, effectively articulates a compelling value proposition tailored to the prospect.  4. **Objection Handling:** Evaluates the salesperson's ability to address and overcome prospect objections.     * 1: Fails to address objections, dismissive or defensive.     * 2: Attempts to handle objections but ineffectively, becomes flustered or argumentative.     * 3: Adequately addresses some objections, offers solutions but may not fully resolve concerns.     * 4: Good objection handling, addresses most concerns effectively and professionally.     * 5: Excellent objection handling, confidently and skillfully addresses objections, turning them into opportunities to reinforce the value proposition.  5. **Call Structure and Flow:** Assesses the overall organization and progression of the call.     * 1: Disorganized, no clear structure, call feels aimless and unproductive.     * 2: Some structure, but lacks coherence, transitions are awkward or unclear.     * 3: Adequate structure, follows a logical flow, but could be more impactful.     * 4: Good structure, clear and logical flow, smooth transitions, call progresses efficiently.     * 5: Excellent structure, seamless progression, call feels natural and engaging, achieves clear objectives.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide a summarized evaluation of the transcript, starting with an overall score (1-5, based on a holistic view of the call). After the scores, provide specific feedback and suggestions for improvement, referencing specific sections of the transcript where possible.  Be constructive and focus on actionable advice.  Your output should be formatted clearly and professionally. please just mention 2 key improvement areas without the need to go over each one in detail  **Example Output:**  Overall Score: 4  Feedback:  The salesperson demonstrated excellent needs assessment skills, effectively uncovering the prospect's key pain points.  (See lines 25-32 for a great example of probing questions).  Their communication was generally strong, maintaining a positive and professional tone. However, there's room for improvement in objection handling.  While they attempted to address the prospect's concerns about pricing, they could have more effectively reframed the value proposition to justify the cost. (See lines 45-50 - consider focusing on the ROI here).  The call structure was well-organized and flowed smoothly.  Overall, a strong performance with some key areas for development.  here is the transcript of the user conversation, please try to be as brief as possible with the feedback{{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 2048,\n    \"stream\": false\n}",
+                "gzip": true,
+                "method": "post",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer ***"
+                    }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1158,
+                    "y": -245,
+                    "name": "HTTP_GENERAL"
+                },
+                "restore": {
+                    "expect": {
+                        "qs": {
+                            "mode": "chose"
+                        },
+                        "method": {
+                            "mode": "chose",
+                            "label": "POST"
+                        },
+                        "headers": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null
+                            ]
+                        },
+                        "bodyType": {
+                            "label": "Raw"
+                        },
+                        "contentType": {
+                            "label": "JSON (application/json)"
+                        }
+                    },
+                    "parameters": {
+                        "auth": {
+                            "label": "mlaiapikey"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "auth",
+                        "type": "keychain:apikeyauth",
+                        "label": "Credentials",
+                        "required": true
+                    },
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String"
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate"
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content type",
+                        "validate": {
+                            "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "data",
+                        "type": "buffer",
+                        "label": "Request content"
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 25,
+            "module": "http:ActionSendDataAPIKeyAuth",
+            "version": 3,
+            "parameters": {
+                "auth": 61592,
+                "handleErrors": false
+            },
+            "mapper": {
+                "url": "https://api.aimlapi.com/chat/completions",
+                "serializeUrl": false,
+                "method": "post",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer ***"
+                    }
+                ],
+                "qs": [],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "timeout": "",
+                "shareCookies": false,
+                "ca": "",
+                "rejectUnauthorized": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "gzip": true,
+                "useMtls": false,
+                "contentType": "application/json",
+                "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following assessment, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  1. **Communication Skills:** Assesses the salesperson's ability to articulate clearly, listen actively, and maintain a positive tone.     * 1: Poor communication, frequent interruptions, unclear articulation, negative tone.     * 2: Below average communication, some unclear explanations, occasional interruptions, tone could be improved.     * 3: Average communication, generally clear but could be more engaging, listens adequately, neutral tone.     * 4: Good communication, clear and engaging, active listening demonstrated, positive and professional tone.     * 5: Excellent communication, articulate and persuasive, demonstrates exceptional active listening, maintains a consistently positive and professional tone.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Communication Skills: 4 The salesperson maintained a positive and professional tone throughout the call. Their articulation was clear, and they demonstrated good active listening skills. Here is the user text  {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
+                "followAllRedirects": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1409,
+                    "y": -247,
+                    "name": "HTTP_Communication Skills"
+                },
+                "restore": {
+                    "parameters": {
+                        "auth": {
+                            "label": "mlaiapikey"
+                        }
+                    },
+                    "expect": {
+                        "method": {
+                            "mode": "chose",
+                            "label": "POST"
+                        },
+                        "headers": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null
+                            ]
+                        },
+                        "qs": {
+                            "mode": "chose"
+                        },
+                        "bodyType": {
+                            "label": "Raw"
+                        },
+                        "contentType": {
+                            "label": "JSON (application/json)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "auth",
+                        "type": "keychain:apikeyauth",
+                        "label": "Credentials",
+                        "required": true
+                    },
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "type": "array",
+                        "label": "Headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "label": "Name",
+                                "type": "text",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "label": "Value",
+                                "type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "qs",
+                        "type": "array",
+                        "label": "Query String",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "label": "Name",
+                                "type": "text",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "label": "Value",
+                                "type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate"
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content type",
+                        "validate": {
+                            "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "data",
+                        "type": "buffer",
+                        "label": "Request content"
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 31,
+            "module": "http:ActionSendDataAPIKeyAuth",
+            "version": 3,
+            "parameters": {
+                "auth": 61592,
+                "handleErrors": false
+            },
+            "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "https://api.aimlapi.com/chat/completions",
+                "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following criteria, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  2. **Needs Assessment and Discovery:** Evaluates how well the salesperson uncovers the prospect's pain points and business needs.     * 1: Fails to ask relevant questions, demonstrates no understanding of prospect's needs.     * 2: Asks basic questions without follow-up, superficial understanding of prospect's needs.     * 3: Adequate questioning, gains some insights into prospect's needs, but could probe deeper.     * 4: Good discovery, uncovers key pain points and business needs, demonstrates a good understanding of the prospect's situation.     * 5: Excellent discovery, thoroughly understands the prospect's needs, uncovers underlying pain points and potential opportunities.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Needs Assessment and Discovery: 5 The salesperson excelled at uncovering the prospect's needs. They asked insightful questions and effectively probed deeper to understand the underlying pain points..  here is the chat logs: {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
+                "gzip": true,
+                "method": "post",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer ***"
+                    }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1650,
+                    "y": -200,
+                    "name": "HTTP_Needs_Assessment_Discovery"
+                },
+                "restore": {
+                    "expect": {
+                        "qs": {
+                            "mode": "chose"
+                        },
+                        "method": {
+                            "mode": "chose",
+                            "label": "POST"
+                        },
+                        "headers": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null
+                            ]
+                        },
+                        "bodyType": {
+                            "label": "Raw"
+                        },
+                        "contentType": {
+                            "label": "JSON (application/json)"
+                        }
+                    },
+                    "parameters": {
+                        "auth": {
+                            "label": "mlaiapikey"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "auth",
+                        "type": "keychain:apikeyauth",
+                        "label": "Credentials",
+                        "required": true
+                    },
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String"
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate"
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content type",
+                        "validate": {
+                            "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "data",
+                        "type": "buffer",
+                        "label": "Request content"
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 32,
+            "module": "http:ActionSendDataAPIKeyAuth",
+            "version": 3,
+            "parameters": {
+                "auth": 61592,
+                "handleErrors": false
+            },
+            "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "https://api.aimlapi.com/chat/completions",
+                "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following criteria, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  **Product Knowledge and Value Proposition:** Assesses the salesperson's understanding of the product and ability to align its benefits with the prospect's needs.   * 1: Lacks product knowledge, unable to articulate the value proposition.   * 2: Basic product knowledge, struggles to connect product features to prospect needs.   * 3: Adequate product knowledge, presents some value alignment, but could be more persuasive.   * 4: Good product knowledge, clearly articulates the value proposition and connects it to prospect needs.   * 5: Excellent product expertise, demonstrates deep understanding and passion for the product, effectively articulates a compelling value proposition tailored to the prospect.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Product Knowledge and Value Proposition: 4 The salesperson demonstrated good product knowledge and clearly articulated the value proposition.  They could have strengthened the connection between specific features and the prospect's identified needs. {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
+                "gzip": true,
+                "method": "post",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer ***"
+                    }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1883,
+                    "y": -171,
+                    "name": "HTTP_Product_Knowledge"
+                },
+                "restore": {
+                    "expect": {
+                        "qs": {
+                            "mode": "chose"
+                        },
+                        "method": {
+                            "mode": "chose",
+                            "label": "POST"
+                        },
+                        "headers": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null
+                            ]
+                        },
+                        "bodyType": {
+                            "label": "Raw"
+                        },
+                        "contentType": {
+                            "label": "JSON (application/json)"
+                        }
+                    },
+                    "parameters": {
+                        "auth": {
+                            "label": "mlaiapikey"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "auth",
+                        "type": "keychain:apikeyauth",
+                        "label": "Credentials",
+                        "required": true
+                    },
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String"
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate"
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content type",
+                        "validate": {
+                            "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "data",
+                        "type": "buffer",
+                        "label": "Request content"
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 33,
+            "module": "http:ActionSendDataAPIKeyAuth",
+            "version": 3,
+            "parameters": {
+                "auth": 61592,
+                "handleErrors": false
+            },
+            "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "https://api.aimlapi.com/chat/completions",
+                "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following criteria, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  **Objection Handling:** Evaluates the salesperson's ability to address and overcome prospect objections.  * 1: Fails to address objections, dismissive or defensive.  * 2: Attempts to handle objections but ineffectively, becomes flustered or argumentative.  * 3: Adequately addresses some objections, offers solutions but may not fully resolve concerns.  * 4: Good objection handling, addresses most concerns effectively and professionally.  * 5: Excellent objection handling, confidently and skillfully addresses objections, turning them into opportunities to reinforce the value proposition.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Objection Handling: 3 The salesperson attempted to address the prospect's pricing concerns but could have been more effective.  Consider reframing the value proposition to emphasize the long-term ROI.  {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
+                "gzip": true,
+                "method": "post",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer ***"
+                    }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 2102,
+                    "y": -140,
+                    "name": "HTTP Objection Handling"
+                },
+                "restore": {
+                    "expect": {
+                        "qs": {
+                            "mode": "chose"
+                        },
+                        "method": {
+                            "mode": "chose",
+                            "label": "POST"
+                        },
+                        "headers": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null
+                            ]
+                        },
+                        "bodyType": {
+                            "label": "Raw"
+                        },
+                        "contentType": {
+                            "label": "JSON (application/json)"
+                        }
+                    },
+                    "parameters": {
+                        "auth": {
+                            "label": "mlaiapikey"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "auth",
+                        "type": "keychain:apikeyauth",
+                        "label": "Credentials",
+                        "required": true
+                    },
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String"
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate"
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content type",
+                        "validate": {
+                            "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "data",
+                        "type": "buffer",
+                        "label": "Request content"
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 34,
+            "module": "http:ActionSendDataAPIKeyAuth",
+            "version": 3,
+            "parameters": {
+                "auth": 61592,
+                "handleErrors": false
+            },
+            "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "https://api.aimlapi.com/chat/completions",
+                "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following criteria, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  **Call Structure and Flow:** Assesses the overall organization and progression of the call.  * 1: Disorganized, no clear structure, call feels aimless and unproductive.  * 2: Some structure, but lacks coherence, transitions are awkward or unclear.  * 3: Adequate structure, follows a logical flow, but could be more impactful.  * 4: Good structure, clear and logical flow, smooth transitions, call progresses efficiently.  * 5: Excellent structure, seamless progression, call feels natural and engaging, achieves clear objectives.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Call Structure and Flow: 4 The call followed a logical structure with smooth transitions. The salesperson effectively managed the conversation and kept it focused. ** here are the conversation logs:  {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
+                "gzip": true,
+                "method": "post",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer ***"
+                    }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 2339,
+                    "y": -105,
+                    "name": "HTTP Call Structure and Flow"
+                },
+                "restore": {
+                    "expect": {
+                        "qs": {
+                            "mode": "chose"
+                        },
+                        "method": {
+                            "mode": "chose",
+                            "label": "POST"
+                        },
+                        "headers": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null
+                            ]
+                        },
+                        "bodyType": {
+                            "label": "Raw"
+                        },
+                        "contentType": {
+                            "label": "JSON (application/json)"
+                        }
+                    },
+                    "parameters": {
+                        "auth": {
+                            "label": "mlaiapikey"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "auth",
+                        "type": "keychain:apikeyauth",
+                        "label": "Credentials",
+                        "required": true
+                    },
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String"
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate"
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content type",
+                        "validate": {
+                            "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "data",
+                        "type": "buffer",
+                        "label": "Request content"
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 40,
+            "module": "google-sheets:updateRow",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 5666789
+            },
+            "mapper": {
+                "from": "share",
+                "mode": "select",
+                "values": {
+                    "19": "{{22.data.choices[].message.content}}",
+                    "20": "{{25.data.choices[].message.content}}",
+                    "21": "{{31.data.choices[].message.content}}",
+                    "22": "{{32.data.choices[].message.content}}",
+                    "23": "{{33.data.choices[].message.content}}",
+                    "24": "{{34.data.choices[].message.content}}"
+                },
+                "sheetId": "log_responses_sales",
+                "rowNumber": "{{7.rowNumber}}",
+                "spreadsheetId": "/1K2iyKc8KhvhGRY_VGy8RmHhOObFqaLbbYiLIYkaQW5A",
+                "includesHeaders": true,
+                "valueInputOption": "USER_ENTERED"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 2568,
+                    "y": -59
+                },
+                "restore": {
+                    "expect": {
+                        "from": {
+                            "label": "Shared with me"
+                        },
+                        "mode": {
+                            "label": "Search by path"
+                        },
+                        "sheetId": {
+                            "label": "log_responses_sales"
+                        },
+                        "spreadsheetId": {
+                            "path": [
+                                "Deepseek Hackathon"
+                            ]
+                        },
+                        "includesHeaders": {
+                            "label": "Yes",
+                            "nested": [
+                                {
+                                    "name": "values",
+                                    "spec": [
+                                        {
+                                            "name": "0",
+                                            "type": "text",
+                                            "label": "Type (A)"
+                                        },
+                                        {
+                                            "name": "1",
+                                            "type": "text",
+                                            "label": "Call End Reason (B)"
+                                        },
+                                        {
+                                            "name": "2",
+                                            "type": "text",
+                                            "label": "Vapi link (C)"
+                                        },
+                                        {
+                                            "name": "3",
+                                            "type": "text",
+                                            "label": "Collection 1 (D)"
+                                        },
+                                        {
+                                            "name": "4",
+                                            "type": "text",
+                                            "label": "Collection 2 (E)"
+                                        },
+                                        {
+                                            "name": "5",
+                                            "type": "text",
+                                            "label": "Transcript (F)"
+                                        },
+                                        {
+                                            "name": "6",
+                                            "type": "text",
+                                            "label": "Vap storage link 2 (G)"
+                                        },
+                                        {
+                                            "name": "7",
+                                            "type": "text",
+                                            "label": "Timestamp (H)"
+                                        },
+                                        {
+                                            "name": "8",
+                                            "type": "text",
+                                            "label": "Timestamp 2 (I)"
+                                        },
+                                        {
+                                            "name": "9",
+                                            "type": "text",
+                                            "label": "Timestamp (Cleaned) (J)"
+                                        },
+                                        {
+                                            "name": "10",
+                                            "type": "text",
+                                            "label": "Unknown (K)"
+                                        },
+                                        {
+                                            "name": "11",
+                                            "type": "text",
+                                            "label": "Unknown 2 (L)"
+                                        },
+                                        {
+                                            "name": "12",
+                                            "type": "text",
+                                            "label": "Voice model (M)"
+                                        },
+                                        {
+                                            "name": "13",
+                                            "type": "text",
+                                            "label": "Voice model 2 (N)"
+                                        },
+                                        {
+                                            "name": "14",
+                                            "type": "text",
+                                            "label": "LLM provider (O)"
+                                        },
+                                        {
+                                            "name": "15",
+                                            "type": "text",
+                                            "label": "LLM model (P)"
+                                        },
+                                        {
+                                            "name": "16",
+                                            "type": "text",
+                                            "label": "Conversation starter (Q)"
+                                        },
+                                        {
+                                            "name": "17",
+                                            "type": "text",
+                                            "label": "System Prompt (R)"
+                                        },
+                                        {
+                                            "name": "18",
+                                            "type": "text",
+                                            "label": "LLM provider 2 (S)"
+                                        },
+                                        {
+                                            "name": "19",
+                                            "type": "text",
+                                            "label": "Overall analysis (T)"
+                                        },
+                                        {
+                                            "name": "20",
+                                            "type": "text",
+                                            "label": "Criteria 1) Communication Skills (U)"
+                                        },
+                                        {
+                                            "name": "21",
+                                            "type": "text",
+                                            "label": "Criteria 2) Needs Assessment (V)"
+                                        },
+                                        {
+                                            "name": "22",
+                                            "type": "text",
+                                            "label": "Criteria 3) Product Knowledge (W)"
+                                        },
+                                        {
+                                            "name": "23",
+                                            "type": "text",
+                                            "label": "Criteria 4) Objection Handling (X)"
+                                        },
+                                        {
+                                            "name": "24",
+                                            "type": "text",
+                                            "label": "Criteria 5) Call Structure (Y)"
+                                        },
+                                        {
+                                            "name": "25",
+                                            "type": "text",
+                                            "label": "🔐 Softr Record ID (Z)"
+                                        },
+                                        {
+                                            "name": "26",
+                                            "type": "text",
+                                            "label": "Custom Scenario Name (AA)"
+                                        },
+                                        {
+                                            "name": "27",
+                                            "type": "text",
+                                            "label": "Custom User Prompt (AB)"
+                                        },
+                                        {
+                                            "name": "28",
+                                            "type": "text",
+                                            "label": "Custom User Prompt? (AC)"
+                                        },
+                                        {
+                                            "name": "29",
+                                            "type": "text",
+                                            "label": "(AD)"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Values"
+                                }
+                            ]
+                        },
+                        "valueInputOption": {
+                            "mode": "chose",
+                            "label": "User entered"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "My Google connection (lorenzo.governatori@gmail.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "mode",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "select",
+                                "fromAll",
+                                "map"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valueInputOption",
+                        "type": "select",
+                        "label": "Value input option",
+                        "validate": {
+                            "enum": [
+                                "USER_ENTERED",
+                                "RAW"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Drive",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share",
+                                "team"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "file",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "rowNumber",
+                        "type": "uinteger",
+                        "label": "Row number",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "values",
+                        "spec": [
+                            {
+                                "name": "0",
+                                "type": "text",
+                                "label": "Type (A)"
+                            },
+                            {
+                                "name": "1",
+                                "type": "text",
+                                "label": "Call End Reason (B)"
+                            },
+                            {
+                                "name": "2",
+                                "type": "text",
+                                "label": "Vapi link (C)"
+                            },
+                            {
+                                "name": "3",
+                                "type": "text",
+                                "label": "Collection 1 (D)"
+                            },
+                            {
+                                "name": "4",
+                                "type": "text",
+                                "label": "Collection 2 (E)"
+                            },
+                            {
+                                "name": "5",
+                                "type": "text",
+                                "label": "Transcript (F)"
+                            },
+                            {
+                                "name": "6",
+                                "type": "text",
+                                "label": "Vap storage link 2 (G)"
+                            },
+                            {
+                                "name": "7",
+                                "type": "text",
+                                "label": "Timestamp (H)"
+                            },
+                            {
+                                "name": "8",
+                                "type": "text",
+                                "label": "Timestamp 2 (I)"
+                            },
+                            {
+                                "name": "9",
+                                "type": "text",
+                                "label": "Timestamp (Cleaned) (J)"
+                            },
+                            {
+                                "name": "10",
+                                "type": "text",
+                                "label": "Unknown (K)"
+                            },
+                            {
+                                "name": "11",
+                                "type": "text",
+                                "label": "Unknown 2 (L)"
+                            },
+                            {
+                                "name": "12",
+                                "type": "text",
+                                "label": "Voice model (M)"
+                            },
+                            {
+                                "name": "13",
+                                "type": "text",
+                                "label": "Voice model 2 (N)"
+                            },
+                            {
+                                "name": "14",
+                                "type": "text",
+                                "label": "LLM provider (O)"
+                            },
+                            {
+                                "name": "15",
+                                "type": "text",
+                                "label": "LLM model (P)"
+                            },
+                            {
+                                "name": "16",
+                                "type": "text",
+                                "label": "Conversation starter (Q)"
+                            },
+                            {
+                                "name": "17",
+                                "type": "text",
+                                "label": "System Prompt (R)"
+                            },
+                            {
+                                "name": "18",
+                                "type": "text",
+                                "label": "LLM provider 2 (S)"
+                            },
+                            {
+                                "name": "19",
+                                "type": "text",
+                                "label": "Overall analysis (T)"
+                            },
+                            {
+                                "name": "20",
+                                "type": "text",
+                                "label": "Criteria 1) Communication Skills (U)"
+                            },
+                            {
+                                "name": "21",
+                                "type": "text",
+                                "label": "Criteria 2) Needs Assessment (V)"
+                            },
+                            {
+                                "name": "22",
+                                "type": "text",
+                                "label": "Criteria 3) Product Knowledge (W)"
+                            },
+                            {
+                                "name": "23",
+                                "type": "text",
+                                "label": "Criteria 4) Objection Handling (X)"
+                            },
+                            {
+                                "name": "24",
+                                "type": "text",
+                                "label": "Criteria 5) Call Structure (Y)"
+                            },
+                            {
+                                "name": "25",
+                                "type": "text",
+                                "label": "🔐 Softr Record ID (Z)"
+                            },
+                            {
+                                "name": "26",
+                                "type": "text",
+                                "label": "Custom Scenario Name (AA)"
+                            },
+                            {
+                                "name": "27",
+                                "type": "text",
+                                "label": "Custom User Prompt (AB)"
+                            },
+                            {
+                                "name": "28",
+                                "type": "text",
+                                "label": "Custom User Prompt? (AC)"
+                            },
+                            {
+                                "name": "29",
+                                "type": "text",
+                                "label": "(AD)"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Values"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu2.make.com",
+        "notes": []
+    }
+}
