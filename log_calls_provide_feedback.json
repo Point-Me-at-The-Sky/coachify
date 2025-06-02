@@ -135,7 +135,8 @@
                     "30": "{{1.analysis.successEvaluation}}",
                     "31": "{{1.timestamp}}",
                     "32": "{{1.assistant.id}}",
-                    "33": "{{1.assistant.name}}"
+                    "33": "{{1.assistant.name}}",
+                    "34": "{{1.assistant.variableValues.user_email}}"
                 },
                 "sheetId": "log_responses_sales",
                 "spreadsheetId": "/1K2iyKc8KhvhGRY_VGy8RmHhOObFqaLbbYiLIYkaQW5A",
@@ -146,8 +147,8 @@
             },
             "metadata": {
                 "designer": {
-                    "x": 677,
-                    "y": -99
+                    "x": 673,
+                    "y": -130
                 },
                 "restore": {
                     "expect": {
@@ -340,6 +341,11 @@
                                             "name": "33",
                                             "type": "text",
                                             "label": "assistant name (AH)"
+                                        },
+                                        {
+                                            "name": "34",
+                                            "type": "text",
+                                            "label": "user email (AI)"
                                         }
                                     ],
                                     "type": "collection",
@@ -628,6 +634,11 @@
                                 "name": "33",
                                 "type": "text",
                                 "label": "assistant name (AH)"
+                            },
+                            {
+                                "name": "34",
+                                "type": "text",
+                                "label": "user email (AI)"
                             }
                         ],
                         "type": "collection",
@@ -722,12 +733,13 @@
             "version": 3,
             "parameters": {
                 "auth": 61592,
-                "handleErrors": false
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
             },
             "mapper": {
                 "ca": "",
                 "qs": [],
-                "url": "https://api.aimlapi.com/chat/completions",
+                "url": "https://openrouter.ai/api/v1/chat/completions",
                 "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"## System Prompt for AI Sales Coach  You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives.  Your evaluation should be based on the following five key criteria, but please just mention 2 or 3 key improvement areas:  1. **Communication Skills:** Assesses the salesperson's ability to articulate clearly, listen actively, and maintain a positive tone.     * 1: Poor communication, frequent interruptions, unclear articulation, negative tone.     * 2: Below average communication, some unclear explanations, occasional interruptions, tone could be improved.     * 3: Average communication, generally clear but could be more engaging, listens adequately, neutral tone.     * 4: Good communication, clear and engaging, active listening demonstrated, positive and professional tone.     * 5: Excellent communication, articulate and persuasive, demonstrates exceptional active listening, maintains a consistently positive and professional tone.  2. **Needs Assessment and Discovery:** Evaluates how well the salesperson uncovers the prospect's pain points and business needs.     * 1: Fails to ask relevant questions, demonstrates no understanding of prospect's needs.     * 2: Asks basic questions without follow-up, superficial understanding of prospect's needs.     * 3: Adequate questioning, gains some insights into prospect's needs, but could probe deeper.     * 4: Good discovery, uncovers key pain points and business needs, demonstrates a good understanding of the prospect's situation.     * 5: Excellent discovery, thoroughly understands the prospect's needs, uncovers underlying pain points and potential opportunities.  3. **Product Knowledge and Value Proposition:** Assesses the salesperson's understanding of the product and ability to align its benefits with the prospect's needs.     * 1: Lacks product knowledge, unable to articulate the value proposition.     * 2: Basic product knowledge, struggles to connect product features to prospect needs.     * 3: Adequate product knowledge, presents some value alignment, but could be more persuasive.     * 4: Good product knowledge, clearly articulates the value proposition and connects it to prospect needs.     * 5: Excellent product expertise, demonstrates deep understanding and passion for the product, effectively articulates a compelling value proposition tailored to the prospect.  4. **Objection Handling:** Evaluates the salesperson's ability to address and overcome prospect objections.     * 1: Fails to address objections, dismissive or defensive.     * 2: Attempts to handle objections but ineffectively, becomes flustered or argumentative.     * 3: Adequately addresses some objections, offers solutions but may not fully resolve concerns.     * 4: Good objection handling, addresses most concerns effectively and professionally.     * 5: Excellent objection handling, confidently and skillfully addresses objections, turning them into opportunities to reinforce the value proposition.  5. **Call Structure and Flow:** Assesses the overall organization and progression of the call.     * 1: Disorganized, no clear structure, call feels aimless and unproductive.     * 2: Some structure, but lacks coherence, transitions are awkward or unclear.     * 3: Adequate structure, follows a logical flow, but could be more impactful.     * 4: Good structure, clear and logical flow, smooth transitions, call progresses efficiently.     * 5: Excellent structure, seamless progression, call feels natural and engaging, achieves clear objectives.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide a summarized evaluation of the transcript, starting with an overall score (1-5, based on a holistic view of the call). After the scores, provide specific feedback and suggestions for improvement, referencing specific sections of the transcript where possible.  Be constructive and focus on actionable advice.  Your output should be formatted clearly and professionally. please just mention 2 key improvement areas without the need to go over each one in detail  **Example Output:**  Overall Score: 4  Feedback:  The salesperson demonstrated excellent needs assessment skills, effectively uncovering the prospect's key pain points.  (See lines 25-32 for a great example of probing questions).  Their communication was generally strong, maintaining a positive and professional tone. However, there's room for improvement in objection handling.  While they attempted to address the prospect's concerns about pricing, they could have more effectively reframed the value proposition to justify the cost. (See lines 45-50 - consider focusing on the ROI here).  The call structure was well-organized and flowed smoothly.  Overall, a strong performance with some key areas for development.  here is the transcript of the user conversation, please try to be as brief as possible with the feedback{{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 2048,\n    \"stream\": false\n}",
                 "gzip": true,
                 "method": "post",
@@ -738,7 +750,7 @@
                     },
                     {
                         "name": "Authorization",
-                        "value": "Bearer ***"
+                        "value": "Bearer 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"
                     }
                 ],
                 "timeout": "",
@@ -800,6 +812,10 @@
                         "type": "boolean",
                         "label": "Evaluate all states as errors (except for 2xx and 3xx )",
                         "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
                     }
                 ],
                 "expect": [
@@ -971,11 +987,15 @@
             "version": 3,
             "parameters": {
                 "auth": 61592,
-                "handleErrors": false
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
             },
             "mapper": {
-                "url": "https://api.aimlapi.com/chat/completions",
-                "serializeUrl": false,
+                "ca": "",
+                "qs": [],
+                "url": "https://openrouter.ai/api/v1/chat/completions",
+                "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following assessment, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  1. **Communication Skills:** Assesses the salesperson's ability to articulate clearly, listen actively, and maintain a positive tone.     * 1: Poor communication, frequent interruptions, unclear articulation, negative tone.     * 2: Below average communication, some unclear explanations, occasional interruptions, tone could be improved.     * 3: Average communication, generally clear but could be more engaging, listens adequately, neutral tone.     * 4: Good communication, clear and engaging, active listening demonstrated, positive and professional tone.     * 5: Excellent communication, articulate and persuasive, demonstrates exceptional active listening, maintains a consistently positive and professional tone.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Communication Skills: 4 The salesperson maintained a positive and professional tone throughout the call. Their articulation was clear, and they demonstrated good active listening skills. Here is the user text  {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
+                "gzip": true,
                 "method": "post",
                 "headers": [
                     {
@@ -984,23 +1004,20 @@
                     },
                     {
                         "name": "Authorization",
-                        "value": "Bearer ***"
+                        "value": "Bearer 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"
                     }
                 ],
-                "qs": [],
-                "bodyType": "raw",
-                "parseResponse": true,
                 "timeout": "",
+                "useMtls": false,
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "serializeUrl": false,
                 "shareCookies": false,
-                "ca": "",
-                "rejectUnauthorized": true,
+                "parseResponse": true,
                 "followRedirect": true,
                 "useQuerystring": false,
-                "gzip": true,
-                "useMtls": false,
-                "contentType": "application/json",
-                "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following assessment, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  1. **Communication Skills:** Assesses the salesperson's ability to articulate clearly, listen actively, and maintain a positive tone.     * 1: Poor communication, frequent interruptions, unclear articulation, negative tone.     * 2: Below average communication, some unclear explanations, occasional interruptions, tone could be improved.     * 3: Average communication, generally clear but could be more engaging, listens adequately, neutral tone.     * 4: Good communication, clear and engaging, active listening demonstrated, positive and professional tone.     * 5: Excellent communication, articulate and persuasive, demonstrates exceptional active listening, maintains a consistently positive and professional tone.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Communication Skills: 4 The salesperson maintained a positive and professional tone throughout the call. Their articulation was clear, and they demonstrated good active listening skills. Here is the user text  {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
-                "followAllRedirects": false
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
             },
             "metadata": {
                 "designer": {
@@ -1009,12 +1026,10 @@
                     "name": "HTTP_Communication Skills"
                 },
                 "restore": {
-                    "parameters": {
-                        "auth": {
-                            "label": "mlaiapikey"
-                        }
-                    },
                     "expect": {
+                        "qs": {
+                            "mode": "chose"
+                        },
                         "method": {
                             "mode": "chose",
                             "label": "POST"
@@ -1026,14 +1041,16 @@
                                 null
                             ]
                         },
-                        "qs": {
-                            "mode": "chose"
-                        },
                         "bodyType": {
                             "label": "Raw"
                         },
                         "contentType": {
                             "label": "JSON (application/json)"
+                        }
+                    },
+                    "parameters": {
+                        "auth": {
+                            "label": "mlaiapikey"
                         }
                     }
                 },
@@ -1049,6 +1066,10 @@
                         "type": "boolean",
                         "label": "Evaluate all states as errors (except for 2xx and 3xx )",
                         "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
                     }
                 ],
                 "expect": [
@@ -1083,39 +1104,39 @@
                     },
                     {
                         "name": "headers",
-                        "type": "array",
-                        "label": "Headers",
                         "spec": [
                             {
                                 "name": "name",
-                                "label": "Name",
                                 "type": "text",
+                                "label": "Name",
                                 "required": true
                             },
                             {
                                 "name": "value",
-                                "label": "Value",
-                                "type": "text"
+                                "type": "text",
+                                "label": "Value"
                             }
-                        ]
+                        ],
+                        "type": "array",
+                        "label": "Headers"
                     },
                     {
                         "name": "qs",
-                        "type": "array",
-                        "label": "Query String",
                         "spec": [
                             {
                                 "name": "name",
-                                "label": "Name",
                                 "type": "text",
+                                "label": "Name",
                                 "required": true
                             },
                             {
                                 "name": "value",
-                                "label": "Value",
-                                "type": "text"
+                                "type": "text",
+                                "label": "Value"
                             }
-                        ]
+                        ],
+                        "type": "array",
+                        "label": "Query String"
                     },
                     {
                         "name": "bodyType",
@@ -1220,12 +1241,13 @@
             "version": 3,
             "parameters": {
                 "auth": 61592,
-                "handleErrors": false
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
             },
             "mapper": {
                 "ca": "",
                 "qs": [],
-                "url": "https://api.aimlapi.com/chat/completions",
+                "url": "https://openrouter.ai/api/v1/chat/completions",
                 "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following criteria, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  2. **Needs Assessment and Discovery:** Evaluates how well the salesperson uncovers the prospect's pain points and business needs.     * 1: Fails to ask relevant questions, demonstrates no understanding of prospect's needs.     * 2: Asks basic questions without follow-up, superficial understanding of prospect's needs.     * 3: Adequate questioning, gains some insights into prospect's needs, but could probe deeper.     * 4: Good discovery, uncovers key pain points and business needs, demonstrates a good understanding of the prospect's situation.     * 5: Excellent discovery, thoroughly understands the prospect's needs, uncovers underlying pain points and potential opportunities.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Needs Assessment and Discovery: 5 The salesperson excelled at uncovering the prospect's needs. They asked insightful questions and effectively probed deeper to understand the underlying pain points..  here is the chat logs: {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
                 "gzip": true,
                 "method": "post",
@@ -1236,7 +1258,7 @@
                     },
                     {
                         "name": "Authorization",
-                        "value": "Bearer ***"
+                        "value": "Bearer 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"
                     }
                 ],
                 "timeout": "",
@@ -1298,6 +1320,10 @@
                         "type": "boolean",
                         "label": "Evaluate all states as errors (except for 2xx and 3xx )",
                         "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
                     }
                 ],
                 "expect": [
@@ -1469,12 +1495,13 @@
             "version": 3,
             "parameters": {
                 "auth": 61592,
-                "handleErrors": false
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
             },
             "mapper": {
                 "ca": "",
                 "qs": [],
-                "url": "https://api.aimlapi.com/chat/completions",
+                "url": "https://openrouter.ai/api/v1/chat/completions",
                 "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following criteria, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  **Product Knowledge and Value Proposition:** Assesses the salesperson's understanding of the product and ability to align its benefits with the prospect's needs.   * 1: Lacks product knowledge, unable to articulate the value proposition.   * 2: Basic product knowledge, struggles to connect product features to prospect needs.   * 3: Adequate product knowledge, presents some value alignment, but could be more persuasive.   * 4: Good product knowledge, clearly articulates the value proposition and connects it to prospect needs.   * 5: Excellent product expertise, demonstrates deep understanding and passion for the product, effectively articulates a compelling value proposition tailored to the prospect.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Product Knowledge and Value Proposition: 4 The salesperson demonstrated good product knowledge and clearly articulated the value proposition.  They could have strengthened the connection between specific features and the prospect's identified needs. {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
                 "gzip": true,
                 "method": "post",
@@ -1485,7 +1512,7 @@
                     },
                     {
                         "name": "Authorization",
-                        "value": "Bearer ***"
+                        "value": "Bearer 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"
                     }
                 ],
                 "timeout": "",
@@ -1547,6 +1574,10 @@
                         "type": "boolean",
                         "label": "Evaluate all states as errors (except for 2xx and 3xx )",
                         "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
                     }
                 ],
                 "expect": [
@@ -1718,12 +1749,13 @@
             "version": 3,
             "parameters": {
                 "auth": 61592,
-                "handleErrors": false
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
             },
             "mapper": {
                 "ca": "",
                 "qs": [],
-                "url": "https://api.aimlapi.com/chat/completions",
+                "url": "https://openrouter.ai/api/v1/chat/completions",
                 "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \" You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following criteria, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  **Objection Handling:** Evaluates the salesperson's ability to address and overcome prospect objections.  * 1: Fails to address objections, dismissive or defensive.  * 2: Attempts to handle objections but ineffectively, becomes flustered or argumentative.  * 3: Adequately addresses some objections, offers solutions but may not fully resolve concerns.  * 4: Good objection handling, addresses most concerns effectively and professionally.  * 5: Excellent objection handling, confidently and skillfully addresses objections, turning them into opportunities to reinforce the value proposition.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Objection Handling: 3 The salesperson attempted to address the prospect's pricing concerns but could have been more effective.  Consider reframing the value proposition to emphasize the long-term ROI.  {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
                 "gzip": true,
                 "method": "post",
@@ -1734,7 +1766,7 @@
                     },
                     {
                         "name": "Authorization",
-                        "value": "Bearer ***"
+                        "value": "Bearer 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"
                     }
                 ],
                 "timeout": "",
@@ -1796,6 +1828,10 @@
                         "type": "boolean",
                         "label": "Evaluate all states as errors (except for 2xx and 3xx )",
                         "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
                     }
                 ],
                 "expect": [
@@ -1967,12 +2003,13 @@
             "version": 3,
             "parameters": {
                 "auth": 61592,
-                "handleErrors": false
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
             },
             "mapper": {
                 "ca": "",
                 "qs": [],
-                "url": "https://api.aimlapi.com/chat/completions",
+                "url": "https://openrouter.ai/api/v1/chat/completions",
                 "data": "{\n    \"model\": \"deepseek/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"You are an AI-powered sales coach designed to evaluate sales call transcripts and provide constructive feedback to sales representatives. Your evaluation should be based on the following criteria, rating on a scale of 1 to 5 (1 being the lowest and 5 the highest):  **Call Structure and Flow:** Assesses the overall organization and progression of the call.  * 1: Disorganized, no clear structure, call feels aimless and unproductive.  * 2: Some structure, but lacks coherence, transitions are awkward or unclear.  * 3: Adequate structure, follows a logical flow, but could be more impactful.  * 4: Good structure, clear and logical flow, smooth transitions, call progresses efficiently.  * 5: Excellent structure, seamless progression, call feels natural and engaging, achieves clear objectives.  **Instructions:**  1. **Input:** You will receive a transcript of a sales conversation. 2. **Output:** Provide scoring (1-5) and specific constructive feedback. Please try to be as brief as possible in your feedback and try to make your feedback constructive focus on actionable advice.   **Example Output:** Call Structure and Flow: 4 The call followed a logical structure with smooth transitions. The salesperson effectively managed the conversation and kept it focused. ** here are the conversation logs:  {{replace(19.text; \"\\r\\n|\\r|\\n\"; )}}\"\n        }\n    ],\n    \"max_tokens\": 4096,\n    \"stream\": false\n}",
                 "gzip": true,
                 "method": "post",
@@ -1983,7 +2020,7 @@
                     },
                     {
                         "name": "Authorization",
-                        "value": "Bearer ***"
+                        "value": "Bearer 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"
                     }
                 ],
                 "timeout": "",
@@ -2045,6 +2082,10 @@
                         "type": "boolean",
                         "label": "Evaluate all states as errors (except for 2xx and 3xx )",
                         "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
                     }
                 ],
                 "expect": [

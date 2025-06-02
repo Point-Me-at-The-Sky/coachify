@@ -12,7 +12,7 @@
             "metadata": {
                 "designer": {
                     "x": 0,
-                    "y": 0
+                    "y": 150
                 },
                 "restore": {
                     "parameters": {
@@ -51,7 +51,7 @@
             "metadata": {
                 "designer": {
                     "x": 300,
-                    "y": 0
+                    "y": 150
                 },
                 "restore": {
                     "expect": {
@@ -119,13 +119,14 @@
             "version": 3,
             "parameters": {
                 "auth": 61592,
-                "handleErrors": false
+                "handleErrors": false,
+                "useNewZLibDeCompress": true
             },
             "mapper": {
                 "ca": "",
                 "qs": [],
-                "url": "https://api.aimlapi.com/chat/completions",
-                "data": "{\n    \"model\": \"claude-3-5-sonnet-20241022\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"can you help me write the system prompt for an AI assistant who is supposed to help the human user practice a sales conversation, the user should act as the seller while the AI should impersonate the buyer, please add in the system prompt some instructions for the AI to keep to short sentences, to ask questions frequently and to never say more than 2 sentences in a row. Can you also directly write the system prompt and not write something like here is the system prompt the scenario is the following: {{6.text}}\"\n        }\n    ],\n    \"max_tokens\": 2048,\n    \"stream\": false\n}",
+                "url": "https://openrouter.ai/api/v1/chat/completions",
+                "data": "{\n    \"model\": \"google/gemini-2.5-flash-preview-05-20\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"Your primary task is to generate a complete and optimized system prompt for an AI voice assistant that will act as a potential buyer in a sales practice conversation. The human user is the salesperson.\\n\\n**Instructions for the System Prompt You Will Generate:**\\n\\n1.  **Persona Elaboration (Beginning of the generated prompt):**\\n    *   The generated prompt MUST start with an instruction for the Vapi AI to establish its persona. It should explicitly use the user-provided variables: `{{6.text}}` (for the buyer's profile) and `{{10.rowValues[].`0`}}` (for what the salesperson is selling).\\n    *   Crucially, instruct the Vapi AI to **elaborate on these details**. If the provided profile details are sparse, use reasonable assumptions to create a consistent and believable persona (e.g., typical challenges of a startup, a polite but skeptical nature towards new pitches).'\\n\\n2.  **Core Buyer Behaviors (To follow the persona elaboration):**\\n    *   After the persona setup, the generated prompt MUST include the following behavioral guidelines for the Vapi AI. The **'maximum of two sentences'** rule is NON-NEGOTIABLE and must be present and emphasized.\\n\\n    **Begin Verbatim Core Behaviors Text Block (include this exact text in your output):**\\n    \\\"Your role is to help the user practice their sales skills. Maintain this persona throughout the conversation.\\n\\n    **Your Core Behaviors:**\\n\\n    *   **Crucial Brevity:** Keep ALL your responses concise, conversational, and strictly to a **MAXIMUM OF TWO SENTENCES**.\\n    *   **Be Inquisitive:** Ask **frequent questions**. Focus on the product/service's value, pricing, features, and implementation.\\n    *   **Realistic Demeanor:** Interact naturally. Be **direct**. Express genuine interest, polite skepticism, or valid **concerns** as a typical buyer would. Voice **objections** occasionally.\\n    *   **Engage Actively:** Respond to pitches with questions or brief comments. Maintain a **professional yet casual tone**.\\n\\n    **Responding to Seller's Questions:**\\n\\n    *   If the seller asks about your 'company' or needs, respond constructively to relevant, polite inquiries. Aim to see how their offering might fit, but don't reveal too much specific internal company information too early.\\\"\\n    **End Verbatim Core Behaviors Text Block.**\\n\\n**Strict Output Requirements for THIS Meta-Prompt:**\\n*   You MUST output **only the raw text** of the fully generated system prompt for the Vapi AI, constructed as per the instructions above.\\n*   Ensure the \\\"**MAXIMUM OF TWO SENTENCES**\\\" instruction is clearly visible and emphasized in the generated prompt.\\n*   NO introductory phrases (e.g., \\\"Here is the system prompt:\\\").\\n*   NO explanations or comments outside of the generated system prompt itself.\\n*   NO markdown code blocks (like ``````text ... ```\"\n        }\n    ],\n    \"response_format\": {\n      \"type\": \"json_object\"\n    },\n    \"max_tokens\": 2048,\n    \"stream\": false\n}",
                 "gzip": true,
                 "method": "post",
                 "headers": [
@@ -135,7 +136,7 @@
                     },
                     {
                         "name": "Authorization",
-                        "value": "Bearer ***"
+                        "value": "Bearer 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"
                     }
                 ],
                 "timeout": "",
@@ -153,8 +154,8 @@
             "metadata": {
                 "designer": {
                     "x": 600,
-                    "y": 0,
-                    "name": "HTTP_GENERAL"
+                    "y": 150,
+                    "name": "Call to Openrouter"
                 },
                 "restore": {
                     "expect": {
@@ -197,6 +198,10 @@
                         "type": "boolean",
                         "label": "Evaluate all states as errors (except for 2xx and 3xx )",
                         "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
                     }
                 ],
                 "expect": [
@@ -379,7 +384,7 @@
             "metadata": {
                 "designer": {
                     "x": 900,
-                    "y": 0,
+                    "y": 150,
                     "name": "parse llm system prompt"
                 },
                 "restore": {
@@ -443,252 +448,1628 @@
             }
         },
         {
-            "id": 2,
-            "module": "http:ActionSendDataAPIKeyAuth",
-            "version": 3,
-            "parameters": {
-                "auth": 61846,
-                "handleErrors": false
-            },
-            "mapper": {
-                "ca": "",
-                "qs": [],
-                "url": "https://api.vapi.ai/assistant/4aeb21ad-d8e3-4c97-a4b4-776b7cb63146",
-                "data": "{\n  \"model\": {\n    \"provider\": \"google\",\n    \"model\": \"gemini-2.0-flash\",\n    \"messages\": [\n      {\n        \"role\": \"system\",\n        \"content\": \"{{8.text}}\"\n      }\n    ]\n  }\n}",
-                "gzip": true,
-                "method": "patch",
-                "headers": [
-                    {
-                        "name": "Authorization",
-                        "value": "Bearer ***"
-                    },
-                    {
-                        "name": "Content-Type",
-                        "value": "application/json"
-                    }
-                ],
-                "timeout": "",
-                "useMtls": false,
-                "bodyType": "raw",
-                "contentType": "application/json",
-                "serializeUrl": false,
-                "shareCookies": false,
-                "parseResponse": true,
-                "followRedirect": true,
-                "useQuerystring": false,
-                "followAllRedirects": false,
-                "rejectUnauthorized": true
-            },
+            "id": 17,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
             "metadata": {
                 "designer": {
                     "x": 1200,
-                    "y": 0
-                },
-                "restore": {
-                    "expect": {
-                        "qs": {
-                            "mode": "chose"
-                        },
-                        "method": {
-                            "mode": "chose",
-                            "label": "PATCH"
-                        },
-                        "headers": {
-                            "mode": "chose",
-                            "items": [
-                                null,
-                                null
-                            ]
-                        },
-                        "bodyType": {
-                            "label": "Raw"
-                        },
-                        "contentType": {
-                            "label": "JSON (application/json)"
-                        }
-                    },
-                    "parameters": {
-                        "auth": {
-                            "label": "vapi"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "auth",
-                        "type": "keychain:apikeyauth",
-                        "label": "Credentials",
-                        "required": true
-                    },
-                    {
-                        "name": "handleErrors",
-                        "type": "boolean",
-                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
-                        "required": true
-                    }
-                ],
-                "expect": [
-                    {
-                        "name": "url",
-                        "type": "url",
-                        "label": "URL",
-                        "required": true
-                    },
-                    {
-                        "name": "serializeUrl",
-                        "type": "boolean",
-                        "label": "Serialize URL",
-                        "required": true
-                    },
-                    {
-                        "name": "method",
-                        "type": "select",
-                        "label": "Method",
-                        "required": true,
-                        "validate": {
-                            "enum": [
-                                "get",
-                                "head",
-                                "post",
-                                "put",
-                                "patch",
-                                "delete",
-                                "options"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "headers",
-                        "spec": [
-                            {
-                                "name": "name",
-                                "type": "text",
-                                "label": "Name",
-                                "required": true
+                    "y": 150
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 26,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": true,
+                                "useNewZLibDeCompress": true
                             },
-                            {
-                                "name": "value",
-                                "type": "text",
-                                "label": "Value"
-                            }
-                        ],
-                        "type": "array",
-                        "label": "Headers"
-                    },
-                    {
-                        "name": "qs",
-                        "spec": [
-                            {
-                                "name": "name",
-                                "type": "text",
-                                "label": "Name",
-                                "required": true
+                            "filter": {
+                                "name": "No file uploaded",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{10.rowValues[].`7`}}",
+                                            "o": "notexist"
+                                        }
+                                    ]
+                                ]
                             },
-                            {
-                                "name": "value",
-                                "type": "text",
-                                "label": "Value"
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "https://api.vapi.ai/assistant/4aeb21ad-d8e3-4c97-a4b4-776b7cb63146",
+                                "gzip": true,
+                                "method": "get",
+                                "headers": [
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                    },
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "authPass": "",
+                                "authUser": "",
+                                "bodyType": "",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1489,
+                                    "y": -13,
+                                    "name": "Get current config for PATCH"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose"
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "GET"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "bodyType": {
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "type": "text",
+                                        "label": "User name"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "type": "password",
+                                        "label": "Password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate"
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
                             }
-                        ],
-                        "type": "array",
-                        "label": "Query String"
-                    },
-                    {
-                        "name": "bodyType",
-                        "type": "select",
-                        "label": "Body type",
-                        "validate": {
-                            "enum": [
-                                "raw",
-                                "x_www_form_urlencoded",
-                                "multipart_form_data"
-                            ]
+                        },
+                        {
+                            "id": 27,
+                            "module": "http:ActionSendDataAPIKeyAuth",
+                            "version": 3,
+                            "parameters": {
+                                "auth": 61846,
+                                "handleErrors": false,
+                                "useNewZLibDeCompress": true
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "https://api.vapi.ai/assistant/4aeb21ad-d8e3-4c97-a4b4-776b7cb63146",
+                                "data": "{\n  \"model\": {\n    \"model\": \"{{26.data.model.model}}\",\n    \"messages\": [\n      {\n        \"role\": \"system\",\n        \"content\": \"You are {{6.text}}. You should elaborate on this profile internally to create a rich, consistent, and believable buyer persona for this sales practice session; for example, if the profile details are sparse, you can infer or add typical attributes like company size, specific interests, or common challenges relevant to the stated profile. You are meeting with a salesperson to discuss their {{10.rowValues[].`0`}}. Your primary role is to help the user (the salesperson) practice their sales conversation skills by acting as this potential buyer. Maintain your buyer persona throughout the conversation. **Your Core Behaviors:** * **Crucial Brevity:** Keep ALL your responses concise, conversational, and strictly to a **MAXIMUM OF TWO SENTENCES**. * **Be Inquisitive:** Ask **frequent questions**. Focus on understanding the product/service's value proposition, pricing, features, and implementation details. * **Realistic Demeanor:** Interact naturally. Be **direct**. Express genuine interest when appropriate, but also show polite skepticism or raise valid **concerns** as a typical buyer would. Don't hesitate to **voice objections** occasionally. * **Engage Actively:** Respond to the seller's pitches with questions or brief comments. Maintain a **professional yet casual tone**. **Responding to Seller's Questions:** * If the seller asks about 'your company' or needs, respond constructively to relevant and polite inquiries. Aim to see how their offering might fit your elaborated persona's potential requirements, but do not reveal too much specific or sensitive internal company information too early in the conversation. Always maintain character.\"\n      }\n    ],\n    \"provider\": \"{{26.data.model.provider}}\"\n  }\n}",
+                                "gzip": true,
+                                "method": "patch",
+                                "headers": [
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                    },
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "bodyType": "raw",
+                                "contentType": "application/json",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1827,
+                                    "y": -15,
+                                    "name": "Update Vapi system prompt"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose"
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "PATCH"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "bodyType": {
+                                            "label": "Raw"
+                                        },
+                                        "contentType": {
+                                            "label": "JSON (application/json)"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "auth": {
+                                            "label": "vapi"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "auth",
+                                        "type": "keychain:apikeyauth",
+                                        "label": "Credentials",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate"
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "contentType",
+                                        "type": "select",
+                                        "label": "Content type",
+                                        "validate": {
+                                            "enum": [
+                                                "text/plain",
+                                                "application/json",
+                                                "application/xml",
+                                                "text/xml",
+                                                "text/html",
+                                                "custom"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "data",
+                                        "type": "buffer",
+                                        "label": "Request content"
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
                         }
-                    },
-                    {
-                        "name": "parseResponse",
-                        "type": "boolean",
-                        "label": "Parse response",
-                        "required": true
-                    },
-                    {
-                        "name": "timeout",
-                        "type": "uinteger",
-                        "label": "Timeout",
-                        "validate": {
-                            "max": 300,
-                            "min": 1
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 20,
+                            "module": "http:ActionGetFile",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": false
+                            },
+                            "filter": {
+                                "name": "File uploaded",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{10.rowValues[].`7`}}",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "url": "{{10.rowValues[].`7`}}",
+                                "method": "get",
+                                "serializeUrl": false,
+                                "shareCookies": false
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 300,
+                                    "name": "Download File from Softr URL"
+                                },
+                                "restore": {},
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "hidden",
+                                        "label": "Method"
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 18,
+                            "module": "http:ActionSendDataAPIKeyAuth",
+                            "version": 3,
+                            "parameters": {
+                                "auth": 61846,
+                                "handleErrors": false,
+                                "useNewZLibDeCompress": true
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "https://api.vapi.ai/file",
+                                "gzip": true,
+                                "method": "post",
+                                "headers": [
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                    },
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "multipart/form-data"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "bodyType": "multipart_form_data",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "formDataFields": [
+                                    {
+                                        "key": "file",
+                                        "data": "{{20.data}}",
+                                        "fileName": "{{20.fileName}}",
+                                        "fieldType": "file"
+                                    }
+                                ],
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1800,
+                                    "y": 300,
+                                    "name": "Upload file to Vapi"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose"
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "POST"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "bodyType": {
+                                            "label": "Multipart/form-data"
+                                        },
+                                        "formDataFields": {
+                                            "mode": "chose",
+                                            "items": [
+                                                {
+                                                    "fieldType": {
+                                                        "mode": "chose",
+                                                        "label": "File"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "parameters": {
+                                        "auth": {
+                                            "label": "vapi"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "auth",
+                                        "type": "keychain:apikeyauth",
+                                        "label": "Credentials",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate"
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "formDataFields",
+                                        "spec": [
+                                            {
+                                                "name": "fieldType",
+                                                "type": "select",
+                                                "label": "Field type",
+                                                "options": [
+                                                    {
+                                                        "label": "Text",
+                                                        "value": "text",
+                                                        "nested": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key",
+                                                                "required": true
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "label": "File",
+                                                        "value": "file",
+                                                        "nested": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key",
+                                                                "required": true
+                                                            },
+                                                            {
+                                                                "name": "data",
+                                                                "type": "buffer",
+                                                                "label": "Data",
+                                                                "semantic": "file:data"
+                                                            },
+                                                            {
+                                                                "help": "File name, including the suffix, e.g. invoice, xml",
+                                                                "name": "fileName",
+                                                                "type": "filename",
+                                                                "label": "File name",
+                                                                "semantic": "file:name"
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "required": true
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Fields"
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 22,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": true,
+                                "useNewZLibDeCompress": true
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "https://api.vapi.ai/tool",
+                                "data": "{\n  \"type\": \"query\",\n  \"function\": {\n    \"name\": \"sales_scenario_context\",\n    \"description\": \"Use this tool at the start of the call to understand the context of the sales conversation. Make sure to digest this so that the call is tailored to the specific sales scenario.\",\n    \"parameters\": {\n      \"type\": \"object\",\n      \"properties\": {},\n      \"required\": []\n    }\n  },\n  \"knowledgeBases\": [\n    {\n      \"name\": \"knowledge_base\",\n      \"provider\": \"google\",\n      \"model\": \"gemini-1.5-flash\",\n      \"description\": \"{{18.data.id}}\",\n      \"fileIds\": [\"{{18.data.id}}\"]\n    }\n  ]\n}",
+                                "gzip": true,
+                                "method": "post",
+                                "headers": [
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                    },
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "authPass": "",
+                                "authUser": "",
+                                "bodyType": "raw",
+                                "contentType": "application/json",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2100,
+                                    "y": 300,
+                                    "name": "Create Knowledge Base Tool"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose"
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "POST"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "bodyType": {
+                                            "label": "Raw"
+                                        },
+                                        "contentType": {
+                                            "label": "JSON (application/json)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "type": "text",
+                                        "label": "User name"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "type": "password",
+                                        "label": "Password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate"
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "contentType",
+                                        "type": "select",
+                                        "label": "Content type",
+                                        "validate": {
+                                            "enum": [
+                                                "text/plain",
+                                                "application/json",
+                                                "application/xml",
+                                                "text/xml",
+                                                "text/html",
+                                                "custom"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "data",
+                                        "type": "buffer",
+                                        "label": "Request content"
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 21,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": true,
+                                "useNewZLibDeCompress": true
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "https://api.vapi.ai/assistant/4aeb21ad-d8e3-4c97-a4b4-776b7cb63146",
+                                "gzip": true,
+                                "method": "get",
+                                "headers": [
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                    },
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "authPass": "",
+                                "authUser": "",
+                                "bodyType": "",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2400,
+                                    "y": 300,
+                                    "name": "Get current config for PATCH"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose"
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "GET"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "bodyType": {
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "type": "text",
+                                        "label": "User name"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "type": "password",
+                                        "label": "Password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate"
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 19,
+                            "module": "http:ActionSendDataAPIKeyAuth",
+                            "version": 3,
+                            "parameters": {
+                                "auth": 61846,
+                                "handleErrors": false,
+                                "useNewZLibDeCompress": true
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "https://api.vapi.ai/assistant/4aeb21ad-d8e3-4c97-a4b4-776b7cb63146",
+                                "data": "{\n  \"model\": {\n    \"model\": \"{{21.data.model.model}}\",\n    \"messages\": [\n      {\n        \"role\": \"system\",\n        \"content\": \"{{8.text}}\"\n      }\n    ],\n    \"provider\": \"{{21.data.model.provider}}\",\n    \"toolIds\": [\"{{22.data.id}}\"]\n  }\n}",
+                                "gzip": true,
+                                "method": "patch",
+                                "headers": [
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                    },
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "bodyType": "raw",
+                                "contentType": "application/json",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2755,
+                                    "y": 295,
+                                    "name": "Link Vapi assistant with Uploaded File"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose"
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "PATCH"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "bodyType": {
+                                            "label": "Raw"
+                                        },
+                                        "contentType": {
+                                            "label": "JSON (application/json)"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "auth": {
+                                            "label": "vapi"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "auth",
+                                        "type": "keychain:apikeyauth",
+                                        "label": "Credentials",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate"
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "contentType",
+                                        "type": "select",
+                                        "label": "Content type",
+                                        "validate": {
+                                            "enum": [
+                                                "text/plain",
+                                                "application/json",
+                                                "application/xml",
+                                                "text/xml",
+                                                "text/html",
+                                                "custom"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "data",
+                                        "type": "buffer",
+                                        "label": "Request content"
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
                         }
-                    },
-                    {
-                        "name": "shareCookies",
-                        "type": "boolean",
-                        "label": "Share cookies with other HTTP modules",
-                        "required": true
-                    },
-                    {
-                        "name": "ca",
-                        "type": "cert",
-                        "label": "Self-signed certificate"
-                    },
-                    {
-                        "name": "rejectUnauthorized",
-                        "type": "boolean",
-                        "label": "Reject connections that are using unverified (self-signed) certificates",
-                        "required": true
-                    },
-                    {
-                        "name": "followRedirect",
-                        "type": "boolean",
-                        "label": "Follow redirect",
-                        "required": true
-                    },
-                    {
-                        "name": "useQuerystring",
-                        "type": "boolean",
-                        "label": "Disable serialization of multiple same query string keys as arrays",
-                        "required": true
-                    },
-                    {
-                        "name": "gzip",
-                        "type": "boolean",
-                        "label": "Request compressed content",
-                        "required": true
-                    },
-                    {
-                        "name": "useMtls",
-                        "type": "boolean",
-                        "label": "Use Mutual TLS",
-                        "required": true
-                    },
-                    {
-                        "name": "contentType",
-                        "type": "select",
-                        "label": "Content type",
-                        "validate": {
-                            "enum": [
-                                "text/plain",
-                                "application/json",
-                                "application/xml",
-                                "text/xml",
-                                "text/html",
-                                "custom"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "data",
-                        "type": "buffer",
-                        "label": "Request content"
-                    },
-                    {
-                        "name": "followAllRedirects",
-                        "type": "boolean",
-                        "label": "Follow all redirect",
-                        "required": true
-                    }
-                ]
-            }
+                    ]
+                }
+            ]
         }
     ],
     "metadata": {
