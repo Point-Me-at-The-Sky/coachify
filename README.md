@@ -1,5 +1,5 @@
 # Coachify
-Coachify's mission statement is to provide AI solutions for simulating high stakes conversations
+Coachify's mission statement is to provide AI solutions for simulating high-stakes conversations
 
 This repo contains the artifacts produced during the hackathon organized by Lablab.ai between 2025-02-14 and 2025-02-16
 we used make.com to create two automation workflows, using the AI/ML API to provide deepseek models to analyze the calls
