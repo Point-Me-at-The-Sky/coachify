@@ -136,7 +136,7 @@
                     },
                     {
                         "name": "Authorization",
-                        "value": "Bearer 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"
+                        "value": "Bearer "
                     }
                 ],
                 "timeout": "",
@@ -489,7 +489,7 @@
                                 "headers": [
                                     {
                                         "name": "Authorization",
-                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                        "value": "Bearer "
                                     },
                                     {
                                         "name": "Content-Type",
@@ -720,7 +720,7 @@
                                 "headers": [
                                     {
                                         "name": "Authorization",
-                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                        "value": "Bearer "
                                     },
                                     {
                                         "name": "Content-Type",
@@ -1043,7 +1043,7 @@
                                 "headers": [
                                     {
                                         "name": "Authorization",
-                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                        "value": "Bearer "
                                     },
                                     {
                                         "name": "Content-Type",
@@ -1348,7 +1348,7 @@
                                 "headers": [
                                     {
                                         "name": "Authorization",
-                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                        "value": "Bearer "
                                     },
                                     {
                                         "name": "Content-Type",
@@ -1601,7 +1601,7 @@
                                 "headers": [
                                     {
                                         "name": "Authorization",
-                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                        "value": "Bearer "
                                     },
                                     {
                                         "name": "Content-Type",
@@ -1832,7 +1832,7 @@
                                 "headers": [
                                     {
                                         "name": "Authorization",
-                                        "value": "Bearer 7c3f99d1-4c75-4a30-b9ae-4ddcc40d9c06"
+                                        "value": "Bearer "
                                     },
                                     {
                                         "name": "Content-Type",

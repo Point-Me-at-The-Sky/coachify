@@ -4,8 +4,8 @@
     
     <script>
       var vapiInstance = null;
-      const assistant = "4aeb21ad-d8e3-4c97-a4b4-776b7cb63146"; 
-      const apiKey = "fa3e7b73-c7e0-4026-9348-e5ef8053ea2d";
+      const assistant = """; 
+      const apiKey = "";
       
       // Configure button without position type of button can be pill or round
       const buttonConfig = {
